@@ -1,9 +1,8 @@
-use vec3;
+mod Vec3;
 
 fn main() {
-    let v1 = vec3::new(1, 2, 3);
-    let x : String = v1[0].to_string();
-    let y : String = v1[1].to_string();
-    let z : String = v1[2].to_string();
-    println! ("x: {}, y: {}, z: {}", x, y, z);
+    let v1 = Vec3::Vec3::new (1.0, 2.0, 3.0);
+    let v2 = Vec3::Vec3 {e:[1.0,2.0,3.0]};
+
+    println!("{}", v1.to_string())
 }
