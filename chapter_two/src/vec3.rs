@@ -38,12 +38,12 @@ impl Sub for Vec3 {
     }
 }
 
-// impl Index for Vec3 {
-//     type Output = f32;
-//     fn index(index: Idx) -> f32 {
-//         self.e[index]
-//     }
-// }
+impl Index<usize> for Vec3 {
+    type Output = f32;
+    fn index(&self, index: usize) -> &f32 {
+        &self.e[index]
+    }
+}
 
 impl fmt::Display for Vec3 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
