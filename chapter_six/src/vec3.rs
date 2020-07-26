@@ -1,7 +1,7 @@
 use std::ops::*;
 use std::fmt;
 
-#[derive(Copy,Clone,Debug)]
+#[derive(Copy,Clone,Debug, Default)]
 pub struct Vec3 {
     pub e : [f32; 3]
 }

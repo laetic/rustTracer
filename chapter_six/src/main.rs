@@ -1,39 +1,30 @@
 mod vec3;
 mod ray;
 mod hitable;
+mod sphere;
+mod hitable_list;
 
 use vec3::*;
 use ray::*;
 use hitable::*;
+use hitable_list::*;
+use sphere::*;
 use std::fs::File;
 use std::io::prelude::*;
 
-fn hit_sphere (center: Vec3, radius: f32, r: Ray) -> f32 {
-    let oc = r.origin() - center;
-    let a = r.direction().dot(r.direction());
-    let b = 2.0 * oc.dot(r.direction());
-    let c = oc.dot(oc) - (radius * radius);
+// trait bound here, putting the Trait right into the argument isn't allowed
+fn color (r: Ray, world : &HitableList) -> Vec3 {
+    let rec : HitRecord = HitRecord {t:0.0, p: Vec3::new(0.0,0.0,0.0), normal:Vec3::new(0.0,0.0,0.0)};
 
-    let discriminant = b*b - 4.0*a*c;
-    if discriminant < 0.0 {
-        return -1.0;
+    if  world.hit(r, 0.0, std::f32::MAX, rec) {
+        return Vec3::new (rec.normal.x() + 1.0, rec.normal.y() + 1.0, rec.normal.z() + 1.0) * 0.5;
     }
+
     else {
-        return (-b - discriminant.sqrt()) / (2.0 * a);
+        let unit_direction = unit_vector(r.direction());
+        let t = (unit_direction.y() + 1.0) * 0.5;
+        return Vec3::new(1.0, 1.0, 1.0) * (1.0 - t) + Vec3::new (0.5, 0.7, 1.0) * t;
     }
-}
-
-fn color(r: Ray) -> Vec3 {
-    let t = hit_sphere(Vec3::new (0.0, 0.0, -1.0), 0.5, r);
-    if t > 0.0 {
-        let N = unit_vector(r.point_at_parameter(t) - Vec3::new (0.0, 0.0, -1.0));
-        return Vec3::new (N.x() + 1.0, N.y() + 1.0, N.z() + 1.0) * 0.5;
-    }
-    
-    let unit_direction = unit_vector(r.direction());
-    let t = 0.5 * (unit_direction.y() + 1.0);
-    let v = (Vec3::new(1.0, 1.0, 1.0) * (1.0 - t)) + (Vec3::new(0.5, 0.7, 1.0) * t );
-    v
 }
 
 fn unit_vector(v : Vec3) -> Vec3 {
@@ -43,7 +34,7 @@ fn unit_vector(v : Vec3) -> Vec3 {
 fn main() -> std::io::Result<()> {
     let nx = 200;
     let ny = 100;
-    let mut file = File::create ("ch4.ppm")?;
+    let mut file = File::create ("ch6.ppm")?;
 
     let first_line = format!("P3\n{} {}\n255\n", nx, ny);
     file.write(first_line.as_bytes());
@@ -53,6 +44,11 @@ fn main() -> std::io::Result<()> {
     let vertical = Vec3::new (0.0, 2.0, 0.0);
     let origin = Vec3::new (0.0, 0.0, 0.0);
 
+    let mut list : Vec<Box<dyn Hitable>> = Vec:: new();
+    list.push(Box::new(Sphere::new (Vec3::new (0.0,0.0,-1.0), 0.5)));
+    list.push(Box::new(Sphere::new (Vec3::new (0.0, -100.5, -1.0), 100.0)));
+    let world = HitableList::new (list, 2);
+
     for j in (0..ny).rev() {
         //file.write(format!("{}\n", j).as_bytes());
         for i in 0..nx {
@@ -60,7 +56,7 @@ fn main() -> std::io::Result<()> {
             let v = j as f32/ ny as f32;
 
             let r = Ray::new (origin, lower_corner + horizontal * u + vertical * v);
-            let col = color(r);
+            let col = color(r, &world);
 
             let ir = 255.99 * col[0];
             let ig = 255.99 * col[1];
