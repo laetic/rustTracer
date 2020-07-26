@@ -1,5 +1,8 @@
 mod vec3;
 use vec3::*;
+mod ray;
+use ray::*;
+
 use std::fs::File;
 use std::io::prelude::*;
 
