@@ -4,19 +4,19 @@ use crate::Ray;
 use crate::Material;
 
 
-pub struct Sphere <'b>{ 
+pub struct Sphere { 
     pub center : Vec3,
     pub radius : f32,
-    pub material : &'b dyn Material,
+    pub material : Box <dyn Material>,
 }
 
-impl Sphere <'_>{
-    pub fn new (cen: Vec3, r: f32 , m:  &'b dyn Material) -> Sphere <'b>{
+impl Sphere {
+    pub fn new (cen: Vec3, r: f32 , m:  Box <dyn Material>) -> Sphere {
         Sphere {center:cen, radius:r, material : m}
     }
 }
 
-impl Hitable for Sphere <'_>{
+impl Hitable for Sphere {
     fn hit (&self, r : Ray, t_min: f32, t_max: f32) -> Option <HitRecord>{
         let oc = r.origin() - self.center;
         let a = r.direction().dot(r.direction());
