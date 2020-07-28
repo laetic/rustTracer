@@ -16,7 +16,7 @@ impl Hitable for HitableList {
         let mut hit_anything = None;
         let mut closest_so_far = t_max;
 
-        let hit = self.list[1].hit(r, t_min, closest_so_far);
+        //let hit = self.list[1].hit(r, t_min, closest_so_far);
 
         for item in self.list.iter() {
             if let Some(hit) = item.hit(r, t_min, closest_so_far){

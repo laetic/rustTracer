@@ -14,10 +14,9 @@ use std::io::prelude::*;
 
 // trait bound here, putting the Trait right into the argument isn't allowed
 fn color (r: Ray, world : &HitableList) -> Vec3 {
-    let rec : HitRecord = HitRecord {t:0.0, p: Vec3::new(0.0,0.0,0.0), normal:Vec3::new(0.0,0.0,0.0)};
 
-    if  world.hit(r, 0.0, std::f32::MAX, rec) {
-        return Vec3::new (rec.normal.x() + 1.0, rec.normal.y() + 1.0, rec.normal.z() + 1.0) * 0.5;
+    if  let Some(hit) = world.hit(r, 0.0, std::f32::MAX) {
+        return Vec3::new (hit.normal.x() + 1.0, hit.normal.y() + 1.0, hit.normal.z() + 1.0) * 0.5;
     }
 
     else {
