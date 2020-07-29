@@ -2,6 +2,7 @@ use crate::Ray;
 use crate::Vec3;
 use crate::material::*;
 
+#[derive(Copy,Clone)]
 pub struct HitRecord <'a>{
     pub t : f32,
     pub p : Vec3,

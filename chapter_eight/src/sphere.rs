@@ -4,14 +4,14 @@ use crate::Ray;
 use crate::Material;
 
 
-pub struct Sphere <'b>{ 
+pub struct Sphere <'a>{ 
     pub center : Vec3,
     pub radius : f32,
-    pub material : &'b dyn Material,
+    pub material : &'a dyn Material,
 }
 
-impl Sphere <'_>{
-    pub fn new (cen: Vec3, r: f32 , m:  &'b dyn Material) -> Sphere <'b>{
+impl <'a> Sphere <'a> {
+    pub fn new (cen: Vec3, r: f32 , m:  &'a dyn Material) -> Sphere <'a>{
         Sphere {center:cen, radius:r, material : m}
     }
 }
