@@ -58,7 +58,8 @@ fn main() -> std::io::Result<()> {
     list.push(Box::new(Sphere::new(Vec3::new(1.0, 0.0, -1.0), 0.5, &metal_one)));
     list.push(Box::new(Sphere::new(Vec3::new(-1.0, 0.0, -1.0), 0.5, &metal_two)));
 
-    let world = HitableList::new(list, 2);
+
+    let world = HitableList::new(list);
 
     let camera = Camera {
         lower_corner: Vec3::new(-2.0, -1.0, -1.0),
@@ -93,6 +94,5 @@ fn main() -> std::io::Result<()> {
             file.write(format!("{} {} {}\n", ir as i32, ig as i32, ib as i32).as_bytes());
         }
     }
-
     Ok(())
 }

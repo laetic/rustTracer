@@ -6,7 +6,7 @@ pub struct HitableList {
 }
 
 impl HitableList {
-    pub fn new (l: Vec<Box<dyn Hitable>>, n: i32 ) -> HitableList {
+    pub fn new (l: Vec<Box<dyn Hitable>> ) -> HitableList {
         HitableList {list:l}
     }
 }

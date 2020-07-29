@@ -21,6 +21,7 @@ pub trait Material {
     fn scatter(&self, r_in : Ray, hit_record : HitRecord) -> Option <MaterialResult>;
 }
 
+#[derive(Copy,Clone,Debug)]
 pub struct Lambertian {
     pub albedo : Vec3,
 }
@@ -28,11 +29,12 @@ pub struct Lambertian {
 impl Material for Lambertian {
     fn scatter(&self, r_in : Ray, rec : HitRecord) -> Option <MaterialResult> {
         let target = rec.p + rec.normal + random_in_unit_sphere();
-        let material_ray = MaterialResult { scattered : Ray::new (rec.p, target - rec.p), attenuation : self.albedo};
-        return Some(material_ray);
+        let material_result = MaterialResult { scattered : Ray::new (rec.p, target - rec.p), attenuation : self.albedo};
+        return Some(material_result);
     }
 }
 
+#[derive(Copy,Clone,Debug)]
 pub struct Metal {
     pub albedo : Vec3,
 }
