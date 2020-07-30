@@ -17,10 +17,19 @@ pub struct MaterialResult {
     pub scattered : Ray
 }
 
-pub trait Material {
+pub trait Material{
     fn scatter(&self, r_in : Ray, hit_record : HitRecord) -> Option <MaterialResult>;
+    fn box_clone(&self) -> Box<dyn Material>;
 }
 
+impl Clone for Box<dyn Material>
+{
+    fn clone(&self) -> Box<dyn Material> {
+        self.box_clone()
+    }
+}
+
+#[derive(Copy,Clone,Debug)]
 pub struct Lambertian {
     pub albedo : Vec3,
 }
@@ -31,8 +40,12 @@ impl Material for Lambertian {
         let material_ray = MaterialResult { scattered : Ray::new (rec.p, target - rec.p), attenuation : self.albedo};
         return Some(material_ray);
     }
+    fn box_clone(&self) -> Box<dyn Material> {
+        return Box::new((*self).clone());
+    }
 }
 
+#[derive(Copy,Clone,Debug)]
 pub struct Metal {
     pub albedo : Vec3,
 }
@@ -46,6 +59,9 @@ impl Material for Metal {
             return Some(material_ray);
         }
         return None;
+    }
+    fn box_clone(&self) -> Box<dyn Material> {
+        return Box::new((*self).clone());
     }
 }
 

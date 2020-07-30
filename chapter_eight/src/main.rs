@@ -24,7 +24,7 @@ use rand::prelude::*;
 fn color(r: Ray, world: &HitableList, depth: i32) -> Vec3 {
     if let Some(hit) = world.hit(r, 0.001, std::f32::MAX) {
         if depth < 50 {
-            if let Some(s) = hit.material.scatter(r, hit) {
+            if let Some(s) = hit.material.scatter(r, hit.clone()) {
                 return s.attenuation * color(s.scattered, world, depth + 1);
             }
         }
