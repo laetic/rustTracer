@@ -53,6 +53,11 @@ fn main() -> std::io::Result<()> {
     let metal_one = Metal{albedo: Vec3::new(0.8, 0.6, 0.2)};
     let metal_two = Metal{albedo: Vec3::new(0.8, 0.8, 0.8)};
 
+    let e_mat_lamb = material::EMat::Lambertian{albedo: Vec3::new(0.8, 0.3, 0.3)};
+    let e_mat_lamb_two = material::EMat::Lambertian{albedo: Vec3::new(0.8, 0.8, 0.0)};
+    let e_mat_metal = material::EMat::Lambertian{albedo: Vec3::new(0.8, 0.6, 0.2)};
+    let e_mat_metal_two = material::EMat::Lambertian{albedo: Vec3::new(0.8, 0.8, 0.8)};
+
     list.push(Box::new(Sphere::new(Vec3::new(0.0, 0.0, -1.0), 0.5, &lambert_one)));
     list.push(Box::new(Sphere::new(Vec3::new(0.0, -100.5, -1.0), 100.0, &lambert_two)));
     list.push(Box::new(Sphere::new(Vec3::new(1.0, 0.0, -1.0), 0.5, &metal_one)));

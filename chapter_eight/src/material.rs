@@ -2,8 +2,33 @@ use crate::Ray;
 use crate::Vec3;
 use crate::HitRecord;
 
-extern crate rand;
-use rand::prelude::*;
+use crate::rand::prelude::*;
+
+pub enum EMat {
+    Lambertian{albedo:Vec3},
+    Metal{albedo:Vec3},
+}
+
+impl EMat {
+    fn scatter(&self, r_in : Ray, rec : HitRecord) -> Option <MaterialResult> {
+        match self {
+            EMat::Lambertian{albedo} => {
+                let target = rec.p + rec.normal + random_in_unit_sphere();
+                let material_result = MaterialResult { scattered : Ray::new (rec.p, target - rec.p), attenuation : *albedo};
+                return Some(material_result);
+            }
+            EMat::Metal{albedo} => {
+                let reflected = reflect(Vec3::unit_vector(r_in.direction()), rec.normal);
+                let scattered = Ray::new (rec.p, reflected);
+                let material_ray = MaterialResult { scattered : scattered, attenuation : *albedo};
+                if scattered.direction().dot(rec.normal) > 0.0 {
+                    return Some(material_ray);
+                }
+                return None;
+            }
+        }
+    }
+}
 
 // #[derive(Copy,Clone,Debug, Default)]
 // pub struct HitRecord {
@@ -16,6 +41,8 @@ pub struct MaterialResult {
     pub attenuation : Vec3,
     pub scattered : Ray
 }
+
+
 
 pub trait Material {
     fn scatter(&self, r_in : Ray, hit_record : HitRecord) -> Option <MaterialResult>;
