@@ -77,25 +77,40 @@ impl Material for Dielectric {
         let reflected = reflect(r_in.direction(), rec.normal);
         let ni_over_nt : f32;
         let attenuation = Vec3::new(1.0,1.0,1.0);
-        
+        let cosine : f32;
+        let reflect_prob : f32;
+        let mut scattered :Ray;
+        let material_ray : MaterialResult;
 
         if r_in.direction().dot(rec.normal) > 0.0 { // into material
             outward_normal = rec.normal * -1.0;
             ni_over_nt = self.ref_idx;
+            cosine = r_in.direction().dot(rec.normal) * self.ref_idx / r_in.direction().length();
         }
         else { // out of material
             outward_normal = rec.normal;
             ni_over_nt = 1.0 / self.ref_idx;
+            cosine = r_in.direction().dot(rec.normal) * -1.0 / r_in.direction().length();
         }
-
-        if let Some(refracted) = refract(r_in.direction(), outward_normal, ni_over_nt) {
-            let scattered = Ray::new(rec.p, refracted);
-            let material_ray = MaterialResult { scattered : scattered, attenuation : attenuation};
-            return Some(material_ray)
+        let refracted = refract(r_in.direction(), outward_normal, ni_over_nt);
+        if refracted.is_some() {
+            reflect_prob = schlick(cosine, self.ref_idx);
         }
         else {
-            let scattered = Ray::new(rec.p, reflected);
-            let material_ray = MaterialResult { scattered : scattered, attenuation : attenuation};
+            scattered = Ray::new(rec.p, reflected);
+            reflect_prob = 1.0;
+        }
+
+        let mut rng = rand::thread_rng();
+        let random: f32 = rng.gen();
+        if random < reflect_prob {
+            scattered = Ray::new(rec.p, reflected);
+            material_ray = MaterialResult { scattered : scattered, attenuation : attenuation};
+            return Some(material_ray);
+        }
+        else {
+            scattered = Ray::new(rec.p, refracted.unwrap());
+            material_ray = MaterialResult { scattered : scattered, attenuation : attenuation};
             return Some(material_ray);
         }
 
@@ -133,4 +148,10 @@ pub fn refract (v: Vec3, n : Vec3, ni_over_nt : f32) -> Option<Vec3> {
         return Some(refracted);
     }
     return None;
+}
+
+pub fn schlick (cosine : f32, ref_idx : f32) -> f32 {
+    let mut r0 = (1.0 - ref_idx) / (1.0 + ref_idx);
+    r0 = r0 * r0;
+    return r0 + (1.0 - r0) * (1.0 - cosine).powf(5.0);
 }
