@@ -52,7 +52,7 @@ fn main() -> std::io::Result<()> {
     list.push(Box::new(Sphere::new(Vec3::new(0.0, -100.5, -1.0), 100.0, Box::new(Lambertian{albedo: Vec3::new(0.8, 0.8, 0.0)}))));
     list.push(Box::new(Sphere::new(Vec3::new(1.0, 0.0, -1.0), 0.5, Box::new(Metal{albedo: Vec3::new(0.2, 0.4, 0.8), fuzz: 0.0}))));
     list.push(Box::new(Sphere::new(Vec3::new(-1.0, 0.0, -1.0), 0.5, Box::new(Dielectric{ref_idx : 1.5}))));
-    //list.push(Box::new(Sphere::new(Vec3::new(-1.0, 0.0, -1.0), -0.45, Box::new(Dielectric{ref_idx : 1.5}))));
+    list.push(Box::new(Sphere::new(Vec3::new(-1.0, 0.0, -1.0), -0.45, Box::new(Dielectric{ref_idx : 1.5}))));
 
     let world = HitableList::new(list, 2);
 
@@ -67,14 +67,10 @@ fn main() -> std::io::Result<()> {
         println!("Scanlines remaining : {}", j);
         //file.write(format!("{}\n", j).as_bytes());
         for i in 0..nx {
-            let mut rng = rand::thread_rng();
             let mut col = Vec3::new(0.0, 0.0, 0.0);
             for s in 0..ns {
-                let mut random: f32 = rng.gen();
-                //let r2: f32 = rng.gen();
-                let u = (i as f32 + random) / nx as f32;
-                random = rng.gen();
-                let v = (j as f32 + random) / ny as f32;
+                let u = (i as f32 + rand::thread_rng().gen_range(0.0,1.0)) / nx as f32;
+                let v = (j as f32 + rand::thread_rng().gen_range(0.0,1.0)) / ny as f32;
 
                 let r = camera.get_ray(u, v);
                 let p = r.point_at_parameter(2.0);

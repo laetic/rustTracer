@@ -93,17 +93,19 @@ impl Material for Dielectric {
             cosine = r_in.direction().dot(rec.normal) * -1.0 / r_in.direction().length();
         }
         let refracted = refract(r_in.direction(), outward_normal, ni_over_nt);
-        if refracted.is_some() {
-            reflect_prob = schlick(cosine, self.ref_idx);
+        match refracted {
+            Some(x) => reflect_prob = schlick(cosine, self.ref_idx),
+            None => reflect_prob = 1.0,
         }
-        else {
-            scattered = Ray::new(rec.p, reflected);
-            reflect_prob = 1.0;
-        }
+        // if refracted.is_some() {
+        //     reflect_prob = schlick(cosine, self.ref_idx);
+        // }
+        // else {
+        //     scattered = Ray::new(rec.p, reflected);
+        //     reflect_prob = 1.0;
+        // }
 
-        let mut rng = rand::thread_rng();
-        let random: f32 = rng.gen();
-        if random < reflect_prob {
+        if rand::thread_rng().gen_range(0.0,1.0) < reflect_prob {
             scattered = Ray::new(rec.p, reflected);
             material_ray = MaterialResult { scattered : scattered, attenuation : attenuation};
             return Some(material_ray);
@@ -122,11 +124,10 @@ impl Material for Dielectric {
 
 
 pub fn random_in_unit_sphere() -> Vec3{
-    let mut rng = rand::thread_rng();
     loop {
-        let mut r1: f32 = rng.gen();
-        let mut r2: f32 = rng.gen();
-        let mut r3: f32 = rng.gen();
+        let r1: f32 = rand::thread_rng().gen_range(0.0,1.0);
+        let r2: f32 = rand::thread_rng().gen_range(0.0,1.0);
+        let r3: f32 = rand::thread_rng().gen_range(0.0,1.0);
         let p = Vec3::new(r1, r2, r3) * 2.0 - Vec3::new(1.0, 1.0, 1.0) ;
         if p.squared_length() < 1.0 {
             return p
@@ -153,5 +154,5 @@ pub fn refract (v: Vec3, n : Vec3, ni_over_nt : f32) -> Option<Vec3> {
 pub fn schlick (cosine : f32, ref_idx : f32) -> f32 {
     let mut r0 = (1.0 - ref_idx) / (1.0 + ref_idx);
     r0 = r0 * r0;
-    return r0 + (1.0 - r0) * (1.0 - cosine).powf(5.0);
+    return r0 + (1.0 - r0) * (1.0 - cosine).powi(5);
 }
