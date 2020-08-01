@@ -56,12 +56,13 @@ fn main() -> std::io::Result<()> {
 
     let world = HitableList::new(list, 2);
 
-    let camera = Camera {
-        lower_corner: Vec3::new(-2.0, -1.0, -1.0),
-        horizontal: Vec3::new(4.0, 0.0, 0.0),
-        vertical: Vec3::new(0.0, 2.0, 0.0),
-        origin: Vec3::new(0.0, 0.0, 0.0),
-    };
+    // let camera = Camera {
+    //     lower_left_corner: Vec3::new(-2.0, -1.0, -1.0),
+    //     horizontal: Vec3::new(4.0, 0.0, 0.0),
+    //     vertical: Vec3::new(0.0, 2.0, 0.0),
+    //     origin: Vec3::new(0.0, 0.0, 0.0),
+    // };
+    let camera = Camera::new (90.0, nx as f32 / ny as f32);
 
     for j in (0..ny).rev() {
         println!("Scanlines remaining : {}", j);

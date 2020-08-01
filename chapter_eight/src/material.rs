@@ -145,7 +145,7 @@ pub fn refract (v: Vec3, n : Vec3, ni_over_nt : f32) -> Option<Vec3> {
     let refracted : Vec3;
     let discriminant = 1.0 - (ni_over_nt * ni_over_nt * (1.0 - (dt * dt)));
     if discriminant > 0.0 {
-        refracted = (uv - n*dt) * ni_over_nt - n * discriminant.sqrt();
+        refracted = ((uv - n*dt) * ni_over_nt ) - (n * discriminant.sqrt());
         return Some(refracted);
     }
     return None;
