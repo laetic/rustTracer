@@ -48,21 +48,26 @@ fn main() -> std::io::Result<()> {
     file.write(first_line.as_bytes());
 
     let mut list: Vec<Box<dyn Hitable>> = Vec::new();
-    list.push(Box::new(Sphere::new(Vec3::new(0.0, 0.0, -1.0), 0.5, Box::new(Lambertian{albedo: Vec3::new(0.8, 0.3, 0.3)}))));
-    list.push(Box::new(Sphere::new(Vec3::new(0.0, -100.5, -1.0), 100.0, Box::new(Lambertian{albedo: Vec3::new(0.8, 0.8, 0.0)}))));
-    list.push(Box::new(Sphere::new(Vec3::new(1.0, 0.0, -1.0), 0.5, Box::new(Metal{albedo: Vec3::new(0.2, 0.4, 0.8), fuzz: 0.0}))));
-    list.push(Box::new(Sphere::new(Vec3::new(-1.0, 0.0, -1.0), 0.5, Box::new(Dielectric{ref_idx : 1.5}))));
-    list.push(Box::new(Sphere::new(Vec3::new(-1.0, 0.0, -1.0), -0.45, Box::new(Dielectric{ref_idx : 1.5}))));
+    // list.push(Box::new(Sphere::new(Vec3::new(0.0, 0.0, -1.0), 0.5, Box::new(Lambertian{albedo: Vec3::new(0.8, 0.3, 0.3)}))));
+    // list.push(Box::new(Sphere::new(Vec3::new(0.0, -100.5, -1.0), 100.0, Box::new(Lambertian{albedo: Vec3::new(0.8, 0.8, 0.0)}))));
+    // list.push(Box::new(Sphere::new(Vec3::new(1.0, 0.0, -1.0), 0.5, Box::new(Metal{albedo: Vec3::new(0.2, 0.4, 0.8), fuzz: 0.0}))));
+    // list.push(Box::new(Sphere::new(Vec3::new(-1.0, 0.0, -1.0), 0.5, Box::new(Dielectric{ref_idx : 1.5}))));
+    // list.push(Box::new(Sphere::new(Vec3::new(-1.0, 0.0, -1.0), -0.45, Box::new(Dielectric{ref_idx : 1.5}))));
+
+    let R = (std::f32::consts::PI / 4.0).cos();
+    list.push(Box::new(Sphere::new(Vec3::new(-R, 0.0, -1.0), R, Box::new(Lambertian{albedo: Vec3::new(0.0, 0.0, 1.0)}))));
+    list.push(Box::new(Sphere::new(Vec3::new(R, 0.0, -1.0), R, Box::new(Lambertian{albedo: Vec3::new(1.0, 0.0, 0.0)}))));
 
     let world = HitableList::new(list, 2);
 
-    // let camera = Camera {
-    //     lower_left_corner: Vec3::new(-2.0, -1.0, -1.0),
-    //     horizontal: Vec3::new(4.0, 0.0, 0.0),
-    //     vertical: Vec3::new(0.0, 2.0, 0.0),
-    //     origin: Vec3::new(0.0, 0.0, 0.0),
-    // };
-    let camera = Camera::new (90.0, nx as f32 / ny as f32);
+    let camera = Camera {
+        lower_left_corner: Vec3::new(-2.0, -1.0, -1.0),
+        horizontal: Vec3::new(4.0, 0.0, 0.0),
+        vertical: Vec3::new(0.0, 2.0, 0.0),
+        origin: Vec3::new(0.0, 0.0, 0.0),
+    };
+    //let camera = Camera::new (Vec3::new(-2.0, 2.0, 1.0), Vec3::new(0.0,0.0,-1.0), Vec3::new(0.0, 1.0, 0.0), 45.0, nx as f32 / ny as f32);
+
 
     for j in (0..ny).rev() {
         println!("Scanlines remaining : {}", j);
