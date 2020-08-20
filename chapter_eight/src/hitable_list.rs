@@ -47,11 +47,11 @@ pub fn random_scene () -> HitableList{
             let choose_mat : f32 = rng.gen();
             let center = Vec3::new (a as f32 + (0.9 * rng.gen::<f32>()), 0.2, b as f32 + 0.9 * rng.gen::<f32>());
             if (center - Vec3::new(4.0, 0.2, 0.0)).length() > 0.9 { 
-                if choose_mat < 0.8 { // diffuse
+                if choose_mat < 0.65 { // diffuse
                     list.push(Box::new(Sphere::new(center, 0.2, Box::new(Lambertian{albedo: Vec3::new(rng.gen::<f32>()*rng.gen::<f32>(), rng.gen::<f32>()*rng.gen::<f32>(), rng.gen::<f32>()*rng.gen::<f32>())}))));
                 }
-                else if choose_mat < 0.95 { //metal
-                    list.push(Box::new(Sphere::new(center, 0.2, Box::new(Metal{albedo: Vec3::new(0.5 * (1.0 + rng.gen::<f32>()), 0.5 * (1.0 + rng.gen::<f32>()), 1.0 + rng.gen::<f32>()), fuzz: 0.5 *  rng.gen::<f32>()}))));
+                else if choose_mat < 0.8 { //metal
+                    list.push(Box::new(Sphere::new(center, 0.2, Box::new(Metal{albedo: Vec3::new(0.5 * (1.0 + rng.gen::<f32>()), 0.5 * (1.0 + rng.gen::<f32>()), 0.5 * (1.0 + rng.gen::<f32>())), fuzz: 0.5 *  rng.gen::<f32>()}))));
                 }
                 else {
                     list.push(Box::new(Sphere::new(center, 0.2, Box::new(Dielectric{ref_idx : 1.5}))));

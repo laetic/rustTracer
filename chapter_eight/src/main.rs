@@ -17,8 +17,10 @@ use std::fs::File;
 use std::io::prelude::*;
 use vec3::*;
 
+extern crate rayon;
 extern crate rand;
 use rand::prelude::*;
+use rayon::prelude::*;
 
 // trait bound here, putting the Trait right into the argument isn't allowed
 fn color(r: Ray, world: &HitableList, depth: i32) -> Vec3 {
@@ -39,9 +41,9 @@ fn color(r: Ray, world: &HitableList, depth: i32) -> Vec3 {
 }
 
 fn main() -> std::io::Result<()> {
-    let nx = 400;
-    let ny = 200;
-    let ns = 100;
+    let nx = 3840;
+    let ny = 2160;
+    let ns = 40;
     let mut file = File::create("ch8.ppm")?;
 
     let first_line = format!("P3\n{} {}\n255\n", nx, ny);
@@ -52,7 +54,7 @@ fn main() -> std::io::Result<()> {
     let lookfrom = Vec3::new(8.0,2.0,3.0);
     let lookat = Vec3::new(4.0, 1.0, 1.5);
     let dist_to_focus : f32 = (lookfrom - lookat).length();
-    let aperture : f32 = 0.02;
+    let aperture : f32 = 0.12;
     // book cam
     let camera = Camera::new ( lookfrom, lookat, Vec3::new(0.0, 1.0, 0.0), 30.0, nx as f32 / ny as f32, aperture, dist_to_focus);
 

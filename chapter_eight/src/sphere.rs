@@ -32,7 +32,7 @@ impl Hitable for Sphere {
                 return Some(HitRecord{t: temp, p: pap, normal: norm, material: self.material.clone()});
             }
 
-            temp = (-b - (b*b + a*c).sqrt()) / a;
+            temp = (-b + (b*b - a*c).sqrt()) / a;
             if temp < t_max && temp > t_min {
                 let pap = r.point_at_parameter(temp);
                 let norm = (pap - self.center) / self.radius;
