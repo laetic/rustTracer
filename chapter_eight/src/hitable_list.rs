@@ -1,5 +1,8 @@
 use crate::hitable::*;
 use crate::Ray;
+use crate::Sphere;
+use crate::Vec3;
+use crate::material::*;
 
 pub struct HitableList {
     pub list : Vec<Box<dyn Hitable>>,
@@ -27,4 +30,16 @@ impl Hitable for HitableList {
         }
         hit_anything
     }
+}
+
+pub fn random_scene () -> HitableList{
+    let n = 500;
+    let mut list: Vec<Box<dyn Hitable>> = Vec::new();
+    list.push(Box::new(Sphere::new(Vec3::new(0.0, 0.0, -1.0), 0.5, Box::new(Dielectric{ref_idx : 1.5}))));
+    list.push(Box::new(Sphere::new(Vec3::new(0.0, -100.5, -1.0), 100.0, Box::new(Lambertian{albedo: Vec3::new(0.8, 0.8, 0.0)}))));
+    list.push(Box::new(Sphere::new(Vec3::new(1.0, 0.0, -1.0), 0.5, Box::new(Metal{albedo: Vec3::new(0.2, 0.4, 0.8), fuzz: 0.0}))));
+    list.push(Box::new(Sphere::new(Vec3::new(-1.0, 0.0, -1.0), 0.5, Box::new(Lambertian{albedo: Vec3::new(0.8, 0.3, 0.3)}))));
+
+    let world = HitableList::new(list, 2);
+    world
 }

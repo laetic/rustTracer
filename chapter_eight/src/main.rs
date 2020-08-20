@@ -47,28 +47,17 @@ fn main() -> std::io::Result<()> {
     let first_line = format!("P3\n{} {}\n255\n", nx, ny);
     file.write(first_line.as_bytes());
 
-    let mut list: Vec<Box<dyn Hitable>> = Vec::new();
-    list.push(Box::new(Sphere::new(Vec3::new(0.0, 0.0, -1.0), 0.5, Box::new(Lambertian{albedo: Vec3::new(0.8, 0.3, 0.3)}))));
-    list.push(Box::new(Sphere::new(Vec3::new(0.0, -100.5, -1.0), 100.0, Box::new(Lambertian{albedo: Vec3::new(0.8, 0.8, 0.0)}))));
-    list.push(Box::new(Sphere::new(Vec3::new(1.0, 0.0, -1.0), 0.5, Box::new(Metal{albedo: Vec3::new(0.2, 0.4, 0.8), fuzz: 0.0}))));
-    list.push(Box::new(Sphere::new(Vec3::new(-1.0, 0.0, -1.0), 0.5, Box::new(Dielectric{ref_idx : 1.5}))));
-    list.push(Box::new(Sphere::new(Vec3::new(-1.0, 0.0, -1.0), -0.45, Box::new(Dielectric{ref_idx : 1.5}))));
+    let world = random_scene();
 
-    //let R = (std::f32::consts::PI / 4.0).cos();
-    //list.push(Box::new(Sphere::new(Vec3::new(-R, 0.0, -1.0), R, Box::new(Lambertian{albedo: Vec3::new(0.0, 0.0, 1.0)}))));
-    //list.push(Box::new(Sphere::new(Vec3::new(R, 0.0, -1.0), R, Box::new(Lambertian{albedo: Vec3::new(1.0, 0.0, 0.0)}))));
-
-    let world = HitableList::new(list, 2);
-
-    let lookfrom = Vec3::new(3.0,3.0,2.0);
-    let lookat = Vec3::new(0.0, 0.0, -1.0);
+    let lookfrom = Vec3::new(2.0,0.5,0.0);
+    let lookat = Vec3::new(1.0, 0.0, -0.5);
     let dist_to_focus : f32 = (lookfrom - lookat).length();
-    let aperture : f32 = 2.0;
+    let aperture : f32 = 0.02;
     // book cam
-    let camera = Camera::new ( lookfrom, lookat, Vec3::new(0.0, 1.0, 0.0), 20.0, nx as f32 / ny as f32, aperture, dist_to_focus);
+    let camera = Camera::new ( lookfrom, lookat, Vec3::new(0.0, 1.0, 0.0), 60.0, nx as f32 / ny as f32, aperture, dist_to_focus);
 
 
-    dbg!(camera);
+    //dbg!(camera);
     for j in (0..ny).rev() {
         println!("Scanlines remaining : {}", j);
         //file.write(format!("{}\n", j).as_bytes());
