@@ -60,6 +60,23 @@ fn main() -> std::io::Result<()> {
 
 
     //dbg!(camera);
+    (0..ny).into_par_iter().rev().flat_map(|y|
+        (0..nx).flat_map(|x| {
+            let col: Vec3 = (0..ns).map(|_| {
+                let u = (i as f32 + rand::thread_rng().gen_range(0.0,1.0)) / nx as f32;
+                let v = (j as f32 + rand::thread_rng().gen_range(0.0,1.0)) / ny as f32;
+
+                let r = camera.get_ray(u, v);
+                let p = r.point_at_parameter(2.0);
+                color(r, &world, 0);
+            }).sum();
+            col.iter().map(|c|
+                (255.99 * ( c / ns as f32).sqrt().max(0.0).min(1.0)) as u8
+            ).collect::<Vec3>()
+        }).collect::<Vec3>()
+    ).collect::<Vec3>();
+        
+
     for j in (0..ny).rev() {
         println!("Scanlines remaining : {}", j);
         //file.write(format!("{}\n", j).as_bytes());
