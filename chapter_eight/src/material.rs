@@ -108,17 +108,17 @@ impl Material for Dielectric {
         if rand::thread_rng().gen_range(0.0,1.0) < reflect_prob {
             scattered = Ray::new(rec.p, reflected);
             material_ray = MaterialResult { scattered : scattered, attenuation : attenuation};
-            return Some(material_ray);
+            Some(material_ray)
         }
         else {
             scattered = Ray::new(rec.p, refracted.unwrap());
             material_ray = MaterialResult { scattered : scattered, attenuation : attenuation};
-            return Some(material_ray);
+            Some(material_ray)
         }
 
     }
     fn box_clone(&self) -> Box<dyn Material> {
-        return Box::new((*self).clone());
+        Box::new((*self).clone())
     }
 }
 
@@ -130,7 +130,7 @@ pub fn random_in_unit_sphere() -> Vec3{
         let r3: f32 = rand::thread_rng().gen_range(0.0,1.0);
         let p = Vec3::new(r1, r2, r3) * 2.0 - Vec3::new(1.0, 1.0, 1.0) ;
         if p.squared_length() < 1.0 {
-            return p
+            return p;
         }
     }
 }

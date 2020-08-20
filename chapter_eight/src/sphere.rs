@@ -39,6 +39,6 @@ impl Hitable for Sphere {
                 return Some(HitRecord{t: temp, p: pap, normal: norm, material: self.material.clone()});
             }
         }
-        return None;
+        None
     }
 }

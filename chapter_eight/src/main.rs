@@ -60,8 +60,12 @@ fn main() -> std::io::Result<()> {
 
     let world = HitableList::new(list, 2);
 
+    let lookfrom = Vec3::new(3.0,3.0,2.0);
+    let lookat = Vec3::new(0.0, 0.0, -1.0);
+    let dist_to_focus : f32 = (lookfrom - lookat).length();
+    let aperture : f32 = 2.0;
     // book cam
-    let camera = Camera::new ( Vec3::new(-2.0,2.0,1.0), Vec3::new(0.0, 0.0, -1.0), Vec3::new(0.0, 1.0, 0.0), 30.0, nx as f32 / ny as f32);
+    let camera = Camera::new ( lookfrom, lookat, Vec3::new(0.0, 1.0, 0.0), 20.0, nx as f32 / ny as f32, aperture, dist_to_focus);
 
 
     dbg!(camera);
