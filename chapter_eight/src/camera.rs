@@ -31,7 +31,7 @@ impl Camera {
         }
     }
     pub fn get_ray (&self, s:f32, t:f32) -> Ray {
-        return Ray::new (self.origin, self.lower_left_corner + self.horizontal * s + self.vertical * t);
+        return Ray::new (self.origin, self.lower_left_corner + self.horizontal * s + self.vertical * t - self.origin);
     }
 
 }

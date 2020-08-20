@@ -39,8 +39,8 @@ fn color(r: Ray, world: &HitableList, depth: i32) -> Vec3 {
 }
 
 fn main() -> std::io::Result<()> {
-    let nx = 200;
-    let ny = 100;
+    let nx = 400;
+    let ny = 200;
     let ns = 100;
     let mut file = File::create("ch8.ppm")?;
 
@@ -60,22 +60,10 @@ fn main() -> std::io::Result<()> {
 
     let world = HitableList::new(list, 2);
 
-    // let camera = Camera {
-    //     lower_left_corner: Vec3::new(-2.0, -1.0, -1.0),
-    //     horizontal: Vec3::new(4.0, 0.0, 0.0),
-    //     vertical: Vec3::new(0.0, 2.0, 0.0),
-    //     origin: Vec3::new(0.0, 0.0, 0.0),
-    // };
-    // test cam 1
-    //let camera = Camera::new (Vec3::new(0.7, 0.5, 0.5), Vec3::new(0.0,-1.0,-1.0), Vec3::new(0.0, 1.0, 0.0), 30.0, (nx as f32) / (ny as f32));
-    // original cam
-    //let camera = Camera::new ( Vec3::new(0.0,0.0,0.0), Vec3::new(0.0, 0.0, -1.0), Vec3::new(0.0, 1.0, 0.0), 90.0, nx as f32 / ny as f32);
-
     // book cam
-    //let camera = Camera::new ( Vec3::new(-2.0,2.0,1.0), Vec3::new(0.0, 0.0, -1.0), Vec3::new(0.0, 1.0, 0.0), 90.0, nx as f32 / ny as f32);
-    // test cam 2
-    let n = 0.35;
-    let camera = Camera::new (Vec3::new(0.0, 0.0, 0.0) + Vec3::new(-2.0,2.0,1.0) * n, Vec3::new(0.0,0.0,-1.0), Vec3::new(0.0, 1.0, 0.0), 90.0, (nx as f32) / (ny as f32));
+    let camera = Camera::new ( Vec3::new(-2.0,2.0,1.0), Vec3::new(0.0, 0.0, -1.0), Vec3::new(0.0, 1.0, 0.0), 30.0, nx as f32 / ny as f32);
+
+
     dbg!(camera);
     for j in (0..ny).rev() {
         println!("Scanlines remaining : {}", j);
