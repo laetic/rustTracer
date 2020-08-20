@@ -49,12 +49,12 @@ fn main() -> std::io::Result<()> {
 
     let world = random_scene();
 
-    let lookfrom = Vec3::new(2.0,0.5,0.0);
-    let lookat = Vec3::new(1.0, 0.0, -0.5);
+    let lookfrom = Vec3::new(8.0,2.0,3.0);
+    let lookat = Vec3::new(4.0, 1.0, 1.5);
     let dist_to_focus : f32 = (lookfrom - lookat).length();
     let aperture : f32 = 0.02;
     // book cam
-    let camera = Camera::new ( lookfrom, lookat, Vec3::new(0.0, 1.0, 0.0), 60.0, nx as f32 / ny as f32, aperture, dist_to_focus);
+    let camera = Camera::new ( lookfrom, lookat, Vec3::new(0.0, 1.0, 0.0), 30.0, nx as f32 / ny as f32, aperture, dist_to_focus);
 
 
     //dbg!(camera);
