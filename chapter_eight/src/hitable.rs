@@ -3,11 +3,11 @@ use crate::Vec3;
 use crate::material::*;
 
 #[derive(Copy,Clone)]
-pub struct HitRecord <'a>{
+pub struct HitRecord {
     pub t : f32,
     pub p : Vec3,
     pub normal : Vec3,
-    pub material : &'a dyn Material,
+    pub material : EMat,
 }
 
 pub trait Hitable {

@@ -1,22 +1,22 @@
 use crate::hitable::*;
 use crate::Vec3;
 use crate::Ray;
-use crate::Material;
+use crate::material::*;
 
 
-pub struct Sphere <'a>{ 
+pub struct Sphere{ 
     pub center : Vec3,
     pub radius : f32,
-    pub material : &'a dyn Material,
+    pub material : EMat,
 }
 
-impl <'a> Sphere <'a> {
-    pub fn new (cen: Vec3, r: f32 , m:  &'a dyn Material) -> Sphere <'a>{
+impl Sphere {
+    pub fn new (cen: Vec3, r: f32 , m:  EMat) -> Sphere {
         Sphere {center:cen, radius:r, material : m}
     }
 }
 
-impl Hitable for Sphere <'_>{
+impl Hitable for Sphere {
     fn hit (&self, r : Ray, t_min: f32, t_max: f32) -> Option <HitRecord>{
         let oc = r.origin() - self.center;
         let a = r.direction().dot(r.direction());

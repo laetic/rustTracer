@@ -4,13 +4,14 @@ use crate::HitRecord;
 
 use crate::rand::prelude::*;
 
+#[derive(Copy,Clone)]
 pub enum EMat {
     Lambertian{albedo:Vec3},
     Metal{albedo:Vec3},
 }
 
 impl EMat {
-    fn scatter(&self, r_in : Ray, rec : HitRecord) -> Option <MaterialResult> {
+    pub fn scatter(&self, r_in : Ray, rec : HitRecord) -> Option <MaterialResult> {
         match self {
             EMat::Lambertian{albedo} => {
                 let target = rec.p + rec.normal + random_in_unit_sphere();
